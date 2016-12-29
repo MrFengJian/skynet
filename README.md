@@ -339,56 +339,60 @@ openstack-neutron-lbaas haproxy -y
 ###neutron.conf示例配置
   示例配置内容如下：
 
-    [DEFAULT]
-    verbose = True
-    debug = True
-    core_plugin=ml2
-    host=slave1
-    notification_driver = neutron.openstack.common.notifier.rpc_notifier
-    interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
-    rpc_backend=rabbit
-    [agent]
-    root_helper=sudo neutron-rootwrap /etc/neutron/rootwrap.conf
-    [oslo_concurrency]
-    lock_path = $state_path/lock
-    [oslo_messaging_rabbit]
-    rabbit_host=192.168.7.213
-    rabbit_port=5672
-    rabbit_userid = openstack
-    rabbit_password = password
-    [keystone_authtoken]
-    auth_uri = http://192.168.7.213:5000
-    auth_url = http://192.168.7.213:35357
-    auth_plugin = password
-    project_domain_id = default
-    user_domain_id = default
-    project_name = service
-    username = neutron
-    password = password
+```ini
+[DEFAULT]
+verbose = True
+debug = True
+core_plugin=ml2
+host=slave1
+notification_driver = neutron.openstack.common.notifier.rpc_notifier
+interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
+rpc_backend=rabbit
+[agent]
+root_helper=sudo neutron-rootwrap /etc/neutron/rootwrap.conf
+[oslo_concurrency]
+lock_path = $state_path/lock
+[oslo_messaging_rabbit]
+rabbit_host=192.168.7.213
+rabbit_port=5672
+rabbit_userid = openstack
+rabbit_password = password
+[keystone_authtoken]
+auth_uri = http://192.168.7.213:5000
+auth_url = http://192.168.7.213:35357
+auth_plugin = password
+project_domain_id = default
+user_domain_id = default
+project_name = service
+username = neutron
+password = password
+```
 
 ###linuxbridge_conf.ini示例配置
   linuxbridge_conf.ini的示例配置如下：
 
-    [ml2]
-    type_drivers= local,flat,vlan,vxlan
-    tenant_network_types = vlan,vxlan,flat
-    mechanism_drivers = linuxbridge,l2population
-    [vlans]
-    tenant_network_type=vlan
-    network_vlan_ranges = physnet2:100:2999
-    [linux_bridge]
-    physical_interface_mappings=physnet2:eth1
-    [vxlan]
-    enable_vxlan=True
-    vxlan_group = None
-    local_ip=192.168.7.207
-    l2_population = True
-    [agent]
-    prevent_arp_spoofing = True
-    [securitygroup]
-    firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
-    enable_security_group = True
-    enable_ipset=True
+```ini
+[ml2]
+type_drivers= local,flat,vlan,vxlan
+tenant_network_types = vlan,vxlan,flat
+mechanism_drivers = linuxbridge,l2population
+[vlans]
+tenant_network_type=vlan
+network_vlan_ranges = physnet2:100:2999
+[linux_bridge]
+physical_interface_mappings=physnet2:eth1
+[vxlan]
+enable_vxlan=True
+vxlan_group = None
+local_ip=192.168.7.207
+l2_population = True
+[agent]
+prevent_arp_spoofing = True
+[securitygroup]
+firewall_driver = neutron.agent.linux.iptables_firewall.IptablesFirewallDriver
+enable_security_group = True
+enable_ipset=True
+```
 
 
 ​	
