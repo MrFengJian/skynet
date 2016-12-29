@@ -70,9 +70,9 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
 ​	基于go语言实现，直接通过go就可以build。
 
 ```shell
-git clone https://github.com/swordboy/skynet.git
-export GOPATH=$(pwd)/skynet
-cd skynet/src &&go build skynet.go
+mkdir src&&git clone https://github.com/swordboy/skynet.git
+export GOPATH=$(pwd)
+cd src/skynet &&go build skynet.go
 ```
 
  	生成的二进制文件即可使用。
@@ -111,41 +111,42 @@ openstack-neutron-lbaas haproxy -y
 
 ​	skynet通过Pod上的以下注解来指定网络配置。
 
-+ skynet/network_id：指定网络。
++    skynet/network_id：指定网络。
 
-+ skynet/subnet_id：指定子网，如果网络和子网都指定，则子网会覆盖掉指定的网络。
++    skynet/subnet_id：指定子网，如果网络和子网都指定，则子网会覆盖掉指定的网络。
 
-+ skynet/ip：指定IP。如果IP已使用，自动尝试删除对应端口，不保证删除成功。
++    skynet/ip：指定IP。如果IP已使用，自动尝试删除对应端口，不保证删除成功。
 
-+ skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
++    skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
 
-  pod指定子网示例：
+     pod指定子网示例：
 
-  ```yaml
-  apiVersion: v1
-  kind: ReplicationController
-  metadata:
-    name: neutron-test
-    labels:
-      app: neutron-test
-  spec:
-    replicas: 1
-    template:
-      metadata:
-        name: neutron-test
-        annotations:
-          skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
-        labels:
-          app: neutron-test
-      spec:
-        terminationGracePeriodSeconds: 0
-        containers:
-          - image: ubuntu:14.04.4
-            env:
-            - name: ROOT_PASS
-              value: password
-            name: busybox
-            imagePullPolicy: IfNotPresent
+     ```yaml
+     apiVersion: v1
+     kind: ReplicationController
+     metadata:
+       name: neutron-test
+       labels:
+         app: neutron-test
+     spec:
+       replicas: 1
+       template:
+         metadata:
+           name: neutron-test
+           annotations:
+             skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
+           labels:
+             app: neutron-test
+         spec:
+           terminationGracePeriodSeconds: 0
+           containers:
+     - image: ubuntu:14.04.4
+       env:
+       - name: ROOT_PASS
+         value: password
+       name: busybox
+       imagePullPolicy: IfNotPresent
+     ```
   ```
 
   ​
@@ -162,7 +163,7 @@ openstack-neutron-lbaas haproxy -y
 
 由于openstack rpm包的问题，我们需要手动创建/etc/neutron/policy.json文件，内容如下：
 
-```json
+​```json
 {
     "context_is_admin":  "role:admin",
     "admin_or_owner": "rule:context_is_admin or tenant_id:%(tenant_id)s",
@@ -322,7 +323,7 @@ openstack-neutron-lbaas haproxy -y
     "get_lsn": "rule:admin_only",
     "create_lsn": "rule:admin_only"
 }
-```
+  ```
 
 ##配置sysctl
   由于centos下安装的bug，需要手工增加配置才能使安全组规则生效。修改/etc/sysctl.conf，增加如下三行配置
