@@ -119,27 +119,27 @@ openstack-neutron-lbaas haproxy -y
 
 +    skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
 
-     pod指定子网示例：
+        pod指定子网示例：
 
      ```yaml
-     apiVersion: v1
-     kind: ReplicationController
-     metadata:
-       name: neutron-test
-       labels:
-         app: neutron-test
-     spec:
-       replicas: 1
-       template:
-         metadata:
-           name: neutron-test
-           annotations:
-             skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
-           labels:
-             app: neutron-test
-         spec:
-           terminationGracePeriodSeconds: 0
-           containers:
+        apiVersion: v1
+        kind: ReplicationController
+        metadata:
+          name: neutron-test
+          labels:
+            app: neutron-test
+        spec:
+          replicas: 1
+          template:
+            metadata:
+              name: neutron-test
+              annotations:
+                skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
+              labels:
+                app: neutron-test
+            spec:
+              terminationGracePeriodSeconds: 0
+              containers:
      - image: ubuntu:14.04.4
        env:
        - name: ROOT_PASS
@@ -147,10 +147,6 @@ openstack-neutron-lbaas haproxy -y
        name: busybox
        imagePullPolicy: IfNotPresent
      ```
-  ```
-
-  ​
-
 # 启用安全组
 
 在使用linuxbridge实现的情况下，可以与neutron的linuxbridge-agent结合，实现容器基于安全组的网络隔离。并且在使用vxlan网络时，也需要neutron的linuxbridge-agent生成的fdb表，用于实现容器通信。
