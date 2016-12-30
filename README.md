@@ -16,6 +16,7 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
 		"neutron_url": "http://192.168.7.211:9696",
 		"default_network_id": "e5e7478a-53ec-4063-a4dc-f3ca3ba3e98b",
 		"default_security_group_ids": "31a8f352-580e-4136-9f91-fa8829aa179c",
+         "service_subnet_enabled": false,
 		"external_router_gateway_ip": "192.168.7.160",
 		"service_cluster_ip_cidr": "10.254.0.0/16"
 	},
@@ -40,11 +41,25 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
 
 + neutron：连接网络节点的方式，以及默认的网络配置。
 
+  + neutron_url：neutron-server的访问地址。
+  + default_network_id：在不指定网络的情况下，默认为POD设置的网络。
+  + default_subnet_id：在不指定网络情况下，默认使用的POD子网，与default_subnet_id同时指定时会覆盖default_network_id的配置。
+  + default_security_group_ids：在不指定安全组的情况下，默认使用的安全组。为空字符串时，使用对应租户的所有安全组。
+  + service_subnet_enabled：是否启用将kubernetes的服务IP映射为真实IP，默认为false。最好在网络为vxlan的情况下进行配置。
+  + external_router_gateway_ip：启用映射服务IP为真实IP情况下，所有子网都连接到一个开放了外网网关的router上，external_router_gateway即为router网关地址，并且要求计算节点上有一张网卡与网关地址在同一个网段。
+  + service_cluster_ip_cidr：kubernetes服务IP的CIDR范围。
+
   > TBD：现在neutron网络节点为noauth模式，支持keystone方式的待开发。
 
 + plugin：网络物理实现的定义。
 
+  + plugin_type：网络的物理实现，支持linuxbridge、macvlan、openvswitch三个值。
+  + trunk_nic：物理机上的trunk网卡名称，用于支持多vlan情况。
+  + tunnel_nic：物理机上的tunnel网卡名称，用于vxlan隧道的配置。
+
 + kubernetes：访问kubernetes的方式。
+
+  + k8s_api_root：kubernetes apiserver的访问地址。
 
   > TBD：目前仅支持http无验证方式访问，基于认证和https的访问待开发。
 
@@ -119,27 +134,27 @@ openstack-neutron-lbaas haproxy -y
 
 +    skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
 
-                 pod指定子网示例：
+                    pod指定子网示例：
 
      ```yaml
-                 apiVersion: v1
-                 kind: ReplicationController
-                 metadata:
-                   name: neutron-test
-                   labels:
-                     app: neutron-test
-                 spec:
-                   replicas: 1
-                   template:
-                     metadata:
-                       name: neutron-test
-                       annotations:
-                         skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
-                       labels:
-                         app: neutron-test
-                     spec:
-                       terminationGracePeriodSeconds: 0
-                       containers:
+                    apiVersion: v1
+                    kind: ReplicationController
+                    metadata:
+                      name: neutron-test
+                      labels:
+                        app: neutron-test
+                    spec:
+                      replicas: 1
+                      template:
+                        metadata:
+                          name: neutron-test
+                          annotations:
+                            skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
+                          labels:
+                            app: neutron-test
+                        spec:
+                          terminationGracePeriodSeconds: 0
+                          containers:
      - image: ubuntu:14.04.4
        env:
        - name: ROOT_PASS

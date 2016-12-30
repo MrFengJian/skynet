@@ -58,8 +58,7 @@ podIp neutron.FixIP, conf util.NetConf) (err error) {
         if err = ensureDeviceUp(tapName); err != nil {
                 return err
         }
-        if networkType == VXLAN_TYPE {
-                //TODO: this is just a temporary solution,may be changed later
+        if conf.Neutron.ServiceSubnetEnabled {
                 if conf.Neutron.ExternalRouterGatewayIp != "" {
                         ensureCidrRoute(subnet.Cidr, conf.Neutron.ExternalRouterGatewayIp, conf.Neutron.ExternalRouteNic)
                         if conf.Neutron.ServiceClusterIpRange != "" {
