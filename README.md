@@ -26,7 +26,8 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
 		"tunnel_nic": "ens160"
 	},
 	"kubernetes": {
-		"k8s_api_root": "http://192.168.7.203:8080"
+		"k8s_api_root": "http://192.168.7.203:8080",
+      	 "kubeconfig":""
 	},
 	"log_level": "info",
 	"cniVersion": "1.0"
@@ -60,8 +61,7 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
 + kubernetes：访问kubernetes的方式。
 
   + k8s_api_root：kubernetes apiserver的访问地址。
-
-  > TBD：目前仅支持http无验证方式访问，基于认证和https的访问待开发。
+  + kubeconfig：访问kubernetes集群的kubeconfig配置文件路径。
 
 + log_level：日志级别。
 
@@ -134,27 +134,27 @@ openstack-neutron-lbaas haproxy -y
 
 +    skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
 
-                    pod指定子网示例：
+                       pod指定子网示例：
 
      ```yaml
-                    apiVersion: v1
-                    kind: ReplicationController
-                    metadata:
-                      name: neutron-test
-                      labels:
-                        app: neutron-test
-                    spec:
-                      replicas: 1
-                      template:
-                        metadata:
-                          name: neutron-test
-                          annotations:
-                            skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
-                          labels:
-                            app: neutron-test
-                        spec:
-                          terminationGracePeriodSeconds: 0
-                          containers:
+                       apiVersion: v1
+                       kind: ReplicationController
+                       metadata:
+                         name: neutron-test
+                         labels:
+                           app: neutron-test
+                       spec:
+                         replicas: 1
+                         template:
+                           metadata:
+                             name: neutron-test
+                             annotations:
+                               skynet/subnet_id: 76aa33bc-c9c1-4834-bcfc-aefd28206997
+                             labels:
+                               app: neutron-test
+                           spec:
+                             terminationGracePeriodSeconds: 0
+                             containers:
      - image: ubuntu:14.04.4
        env:
        - name: ROOT_PASS
