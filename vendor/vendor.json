@@ -9,10 +9,6 @@
 			"revisionTime": "2016-12-02T02:35:07Z"
 		},
 		{
-			"path": "github.com/Sirupsen、logrus",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "F1utsFXSpgUtjxIZK8dyT5+Hi34=",
 			"path": "github.com/containernetworking/cni/pkg/ip",
 			"revision": "98ff61aac32dcf2eb3044a0d5e5f1814837b3c75",
@@ -75,6 +71,12 @@
 			"path": "github.com/d2g/dhcp4client",
 			"revision": "20ae9e156d389b02db72d1f09714b327ef352409",
 			"revisionTime": "2016-12-10T00:22:08Z"
+		},
+		{
+			"checksumSHA1": "HmbftipkadrLlCfzzVQ+iFHbl6g=",
+			"path": "github.com/golang/glog",
+			"revision": "23def4e6c14b4da8ac2ed8007337bc5eb5007998",
+			"revisionTime": "2016-01-25T20:49:56Z"
 		},
 		{
 			"checksumSHA1": "5gUkw5ZmyCH8FDQ9AEyUuWg7QVo=",
@@ -314,15 +316,17 @@
 			"revisionTime": "2016-12-10T00:22:08Z"
 		},
 		{
-			"path": "github.comSirupsenlogrus",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "fg7rQ5uwp0HiQJNJVNekm0MOxIs=",
 			"origin": "skynet/github.com/containernetworking/cni/vendor/golang.org/x/sys/unix",
 			"path": "golang.org/x/sys/unix",
 			"revision": "20ae9e156d389b02db72d1f09714b327ef352409",
 			"revisionTime": "2016-12-10T00:22:08Z"
+		},
+		{
+			"checksumSHA1": "S+OzpkipMb46LGZoWuveqSLAcoM=",
+			"path": "k8s.io/client-go/1.5/kubernetes",
+			"revision": "843f7c4f28b1f647f664f883697107d5c02c5acc",
+			"revisionTime": "2016-10-23T20:27:10Z"
 		}
 	],
 	"rootPath": "skynet"

@@ -62,14 +62,3 @@ type OpenStackSecurityGroup struct {
 type SecurityGroupsResponse struct {
         SecurityGroups []OpenStackSecurityGroup `json:"security_groups"`
 }
-
-type K8sPod struct {
-        Kind     string `json:"kind"`
-        Metadata K8sPodMeta `json:"metadata"`
-}
-type K8sPodMeta struct {
-        Name        string `json:"name"`
-        Namespace   string `json:"namespace"`
-        Labels      map[string]string `json:"labels"`
-        Annotations map[string]string `json:"annotations"`
-}

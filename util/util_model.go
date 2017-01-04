@@ -15,7 +15,7 @@ type K8sArgs struct {
 }
 
 // Kubernetes a K8s specific struct to hold config
-type Kubernetes struct {
+type KubernetesConfig struct {
         K8sAPIRoot string `json:"k8s_api_root"`
         Kubeconfig string `json:"kubeconfig"`
         NodeName   string `json:"node_name"`
@@ -54,6 +54,6 @@ type NetConf struct {
         Hostname   string     `json:"hostname"`
         Neutron    NeutronConfig     `json:"neutron"`
         LogLevel   string     `json:"log_level"`
-        Kubernetes Kubernetes `json:"kubernetes"`
+        Kubernetes KubernetesConfig `json:"kubernetes"`
         Plugin     Plugin `json:"plugin"`
 }

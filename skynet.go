@@ -9,14 +9,15 @@ import (
         "encoding/json"
         log "github.com/Sirupsen/logrus"
         "skynet/neutron"
-        "net/http"
-        "io/ioutil"
         "strings"
         "errors"
         plugin "skynet/pluginv2"
         "skynet/util"
         "github.com/containernetworking/cni/pkg/version"
         "github.com/containernetworking/cni/pkg/types"
+        "k8s.io/client-go/1.5/kubernetes"
+        "k8s.io/client-go/1.5/tools/clientcmd"
+        "k8s.io/client-go/1.5/pkg/api/v1"
 )
 
 var hostname string
@@ -34,32 +35,24 @@ func init() {
         hostname, _ = os.Hostname()
 }
 
-func getPodSpec(k8sUrl, podName, namespace string) (pod neutron.K8sPod, err error) {
-        url := fmt.Sprintf("%s/api/v1/namespaces/%s/pods/%s", k8sUrl, namespace, podName)
-        resp, err := http.Get(url)
-        if err != nil {
-                return pod, err
+func getPodSpec(conf *util.NetConf, podName, namespace string) (pod *v1.Pod, err error) {
+        config, err := clientcmd.BuildConfigFromFlags(conf.Kubernetes.K8sAPIRoot, conf.Kubernetes.Kubeconfig)
+        if err!=nil{
+                return nil,err
         }
-        defer resp.Body.Close()
-        body, err := ioutil.ReadAll(resp.Body)
-        if err != nil {
-                return pod, err
+        client, err := kubernetes.NewForConfig(config)
+        if err!=nil{
+                return nil,err
         }
-        err = json.Unmarshal(body, &pod)
-        if err != nil {
-                return pod, err
-        }
-        return pod, nil
+        return client.Core().Pods(namespace).Get(podName)
 }
 
-func getPodNetwork(conf util.NetConf, neutronApi *neutron.NeutronApi, podName, namespace string) (network *neutron.OpenStackNetwork, subnet *neutron.OpenStackSubnet, ipSpecified string, securityGroupIds []string, err error) {
-        k8sUrl := conf.Kubernetes.K8sAPIRoot
-
-        pod, err := getPodSpec(k8sUrl, podName, namespace)
+func getPodNetwork(conf *util.NetConf, neutronApi *neutron.NeutronApi, podName, namespace string) (network *neutron.OpenStackNetwork, subnet *neutron.OpenStackSubnet, ipSpecified string, securityGroupIds []string, err error) {
+        pod, err := getPodSpec(conf, podName, namespace)
         if err != nil {
                 return nil, nil, ipSpecified, securityGroupIds, err
         }
-        annotations := pod.Metadata.Annotations
+        annotations := pod.ObjectMeta.Annotations
 
         if value, ok := annotations[SECURITY_GROUP_IDS_KEY]; ok {
                 securityGroupIds = strings.Split(value, ",")
@@ -137,7 +130,7 @@ func cmdAdd(args *skel.CmdArgs) error {
         logger.WithFields(log.Fields{"NetConfg": conf, "Args":args}).Info("Loaded CNI NetConf")
         //create port from neutron
         neutronApi := neutron.NewNeutronApi(conf.Neutron.NeutronUrl)
-        network, subnet, ipSpecified, securityGroupIds, err := getPodNetwork(conf, neutronApi, podName, namespace)
+        network, subnet, ipSpecified, securityGroupIds, err := getPodNetwork(&conf, neutronApi, podName, namespace)
         if err != nil {
                 return err
         }
