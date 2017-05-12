@@ -4,6 +4,15 @@
 
 skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，实现了cni与neutron的对接。并可以利用neutron的网络管理功能、安全组功能实现容器网络的进一步隔离定制。skynet的整体网络实现方案参考[设计文档](./docs/design.md)。
 
+## 限制
+
+测试针对1.3.2版本的kubernetes可用。对1.6.1版本的k8s，有如下限制：
+
+- 必须启用service_subnet_enabled，这意味着使用vxlan的方式实现k8s的service，并且通过router的外网网关对外提供访问。
+- 所有节点至少一张网卡，并且主机可以直接访问router的外网网关。
+- 删除自带的kube-proxy daemonset。以防生成的iptables规则影响通信。
+- 所有kubernetes节点安装neutron的linuxbridge-agent。
+
 # skynet配置
 
 ​	遵循cni接口协议的规范，skynet网络的配置文件如下所示：
@@ -50,7 +59,7 @@ skynet插件实现了[cni](https://github.com/containernetworking/cni)接口，�
   + external_router_gateway_ip：启用映射服务IP为真实IP情况下，所有子网都连接到一个开放了外网网关的router上，external_router_gateway即为router网关地址，并且要求计算节点上有一张网卡与网关地址在同一个网段。
   + service_cluster_ip_cidr：kubernetes服务IP的CIDR范围。
 
-  > TBD：现在neutron网络节点为noauth模式，支持keystone方式的待开发。
+  > TBD：现在neutron网络节点为**noauth**模式，支持keystone方式的待开发。
 
 + plugin：网络物理实现的定义。
 
@@ -134,7 +143,7 @@ openstack-neutron-lbaas haproxy -y
 
 +    skynet/security_group_ids：指定Pod安全组列表，多个安全组ID以英文逗号分割。默认使用`20-skynet.conf`中指定的`default_security_group_ids`。
 
-                       pod指定子网示例：
+            pod指定子网示例：
 
      ```yaml
                        apiVersion: v1

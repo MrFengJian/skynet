@@ -73,12 +73,6 @@
 			"revisionTime": "2016-12-10T00:22:08Z"
 		},
 		{
-			"checksumSHA1": "HmbftipkadrLlCfzzVQ+iFHbl6g=",
-			"path": "github.com/golang/glog",
-			"revision": "23def4e6c14b4da8ac2ed8007337bc5eb5007998",
-			"revisionTime": "2016-01-25T20:49:56Z"
-		},
-		{
 			"checksumSHA1": "5gUkw5ZmyCH8FDQ9AEyUuWg7QVo=",
 			"origin": "skynet/github.com/containernetworking/cni/vendor/github.com/onsi/ginkgo",
 			"path": "github.com/onsi/ginkgo",
@@ -323,10 +317,11 @@
 			"revisionTime": "2016-12-10T00:22:08Z"
 		},
 		{
-			"checksumSHA1": "S+OzpkipMb46LGZoWuveqSLAcoM=",
-			"path": "k8s.io/client-go/1.5/kubernetes",
+			"checksumSHA1": "hjLkp5yWq1Ie9B8n0dqSkHCKRNo=",
+			"path": "k8s.io/client-go",
 			"revision": "843f7c4f28b1f647f664f883697107d5c02c5acc",
-			"revisionTime": "2016-10-23T20:27:10Z"
+			"revisionTime": "2016-10-23T20:27:10Z",
+			"tree": true
 		}
 	],
 	"rootPath": "skynet"

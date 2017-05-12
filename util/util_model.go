@@ -18,7 +18,6 @@ type K8sArgs struct {
 type KubernetesConfig struct {
         K8sAPIRoot string `json:"k8s_api_root"`
         Kubeconfig string `json:"kubeconfig"`
-        NodeName   string `json:"node_name"`
 }
 
 //Neutron stores config used to communicate with neutron server
